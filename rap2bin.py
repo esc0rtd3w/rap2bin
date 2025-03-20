@@ -26,12 +26,13 @@ def create_rap_bin(rap_directory, output_bin_file, log_file):
     with open(output_bin_file, "wb") as bin_file, open(log_file, "w") as log:
         for root, _, files in os.walk(rap_directory):
             for filename in files:
-                if filename.endswith(".rap"):
+                base, ext = os.path.splitext(filename)
+                if ext.lower() == ".rap":
                     rap_path = os.path.join(root, filename)
                     try:
                         with open(rap_path, "rb") as rap_file:
                             rap_content = rap_file.read(16)
-                            content_id = filename.replace(".rap", "")
+                            content_id = base
                             if len(rap_content) == 16:
                                 if len(content_id) == 0x24:
                                     # Prepare binary entry with magic number, padding, CONTENT_ID, padding, and 16 bytes of content
